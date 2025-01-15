@@ -1,0 +1,3594 @@
+openapi: 3.0.3
+info:
+  title: OaaSIS TMS Server API
+  version: v2
+  description: 'OaaSIS TMS Server API'
+  contact:
+    name: omelet
+    url: https://omelet.ai/contact-us
+    email: info@omelet.ai
+
+servers:
+  - url: http://localhost:9090
+    description: Development server
+
+
+
+paths:
+  /api/admin/users:
+    get:
+      description: 사용자 조회
+      operationId: listUsers
+      tags:
+        - Admin
+      parameters:
+        - $ref: '#/components/parameters/LoginIdParam'
+        - $ref: '#/components/parameters/UsernameParam'
+        - $ref: '#/components/parameters/BusinessNumberParam'
+        - $ref: '#/components/parameters/PageParam'
+        - $ref: '#/components/parameters/SizeParam'
+      responses:
+        '200':
+          $ref: '#/components/responses/UserListResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  /api/admin/users/{user_id}:
+    get:
+      description: 사용자 조회
+      operationId: getUser
+      tags:
+        - Admin
+      parameters:
+        - $ref: '#/components/parameters/UserIdParam'
+      responses:
+        '200':
+          $ref: '#/components/responses/UserResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+    put:
+      description: 사용자 정보 수정
+      operationId: modifyUser
+      tags:
+        - Admin
+      parameters:
+        - $ref: '#/components/parameters/UserIdParam'
+      requestBody:
+        $ref: '#/components/requestBodies/UserRequest'
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  /api/admin/users/rules:
+    get:
+      description: 사용자 설정 조회
+      operationId: listUserRules
+      tags:
+        - Admin
+      parameters:
+        - $ref: '#/components/parameters/PageParam'
+        - $ref: '#/components/parameters/SizeParam'
+        - $ref: '#/components/parameters/UsernameParam'
+        - $ref: '#/components/parameters/EmailParam'
+        - $ref: '#/components/parameters/PhoneNumberParam'
+      responses:
+        '200':
+          $ref: '#/components/responses/UserRuleListResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+    put:
+      description: 사용자 설정 수정
+      operationId: modifyUserRule
+      tags:
+        - Admin
+      requestBody:
+        $ref: '#/components/requestBodies/UserRuleRequest'
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  /api/routes:
+    get:
+      description: 경로 조회
+      operationId: listRouteByUser
+      tags:
+        - Route
+      parameters:
+        - $ref: '#/components/parameters/PageParam'
+        - $ref: '#/components/parameters/SizeParam'
+        - $ref: '#/components/parameters/StartDateTimeParam'
+        - $ref: '#/components/parameters/EndDateTimeParam'
+      responses:
+        '200':
+          $ref: '#/components/responses/RouteListResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+    delete:
+      description: 경로 삭제
+      operationId: deleteRoute
+      tags:
+        - Route
+      parameters:
+        - $ref: '#/components/parameters/RouteIdsParam'
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  /api/routes/optimization:
+    post:
+      description: 경로 최적화
+      operationId: optimizeRoute
+      tags:
+        - Route
+      requestBody:
+        $ref: '#/components/requestBodies/RouteOptimizationRequest'
+      responses:
+        '200':
+          $ref: '#/components/responses/RouteOptimizationJobIdResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  /api/routes/optimization/{job_id}/status:
+    get:
+      description: 경로 최적화 상태 조회
+      operationId: getRouteOptimizationStatus
+      tags:
+        - Route
+      parameters:
+        - $ref: '#/components/parameters/JobIdParam'
+      responses:
+        '200':
+          $ref: '#/components/responses/RouteOptimizationResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  /api/routes/optimization/{job_id}:
+    delete:
+      description: 경로 최적화 취소
+      operationId: cancelRouteOptimization
+      tags:
+        - Route
+      parameters:
+        - $ref: '#/components/parameters/JobIdParam'
+      responses:
+        '200':
+          $ref: '#/components/responses/RouteOptimizationResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+    post:
+      description: 경로 최적화 job 저장 (이 기능이 왜 있는지 확인 필요)
+      operationId: saveRouteOptimizationByJobId
+      tags:
+        - Route
+      parameters:
+        - $ref: '#/components/parameters/JobIdParam'
+      responses:
+        '200':
+          $ref: '#/components/responses/RouteOptimizationResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  /api/routes/orders/optimization:
+    post:
+      description: 주문을 등록하고 경로를 최적화
+      operationId: optimizeRouteWithCreateOrder
+      tags:
+        - Route
+      requestBody:
+        $ref: '#/components/requestBodies/RouteOptimizationWithOrderRequest'
+      responses:
+        '200':
+          $ref: '#/components/responses/RouteResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  /api/orders/{order_id}:
+    get:
+      description: 주문 조회
+      operationId: getOrder
+      tags:
+        - Order
+      parameters:
+        - $ref: '#/components/parameters/OrderIdParam'
+      responses:
+        '200':
+          $ref: '#/components/responses/OrderResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+    put:
+      description: 주문 수정
+      operationId: updateOrder
+      tags:
+        - Order
+      parameters:
+        - $ref: '#/components/parameters/OrderIdParam'
+      requestBody:
+        $ref: '#/components/requestBodies/OrderRequest'
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  /api/orders/delivery/status:
+    patch:
+      description: 주문 배송 상태 변경
+      operationId: updateOrderDeliveryStatus
+      tags:
+        - Order
+      requestBody:
+        $ref: '#/components/requestBodies/OrderDeliveryStatusRequest'
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  /api/orders/dispatch/status:
+    patch:
+      description: 주문 배차 상태 변경
+      operationId: updateOrdersDispatchStatus
+      tags:
+        - Order
+      requestBody:
+        $ref: '#/components/requestBodies/OrderDispatchStatusRequest'
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  /api/orders:
+    get:
+      description: 주문 조회
+      operationId: listOrders
+      tags:
+        - Order
+      parameters:
+        - $ref: '#/components/parameters/PageParam'
+        - $ref: '#/components/parameters/SizeParam'
+        - $ref: '#/components/parameters/OrderNumberParam'
+        - $ref: '#/components/parameters/DeliveryStatusParam'
+        - $ref: '#/components/parameters/DispatchStatusParam'
+        - $ref: '#/components/parameters/CustomerNameParam'
+        - $ref: '#/components/parameters/ItemNameParam'
+        - $ref: '#/components/parameters/LogisticsCenterIdParam'
+        - $ref: '#/components/parameters/OrderedAtStartParam'
+        - $ref: '#/components/parameters/OrderedAtEndParam'
+        - $ref: '#/components/parameters/PreferredDateStartParam'
+        - $ref: '#/components/parameters/PreferredDateEndParam'
+        - $ref: '#/components/parameters/DeliveredAtStartParam'
+        - $ref: '#/components/parameters/DeliveredAtEndParam'
+      responses:
+        '200':
+          $ref: '#/components/responses/OrderListResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+    post:
+      description: 주문 생성
+      operationId: createOrder
+      tags:
+        - Order
+      requestBody:
+        $ref: '#/components/requestBodies/OrderRequest'
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+    delete:
+      description: 주문 삭제
+      operationId: deleteOrders
+      tags:
+        - Order
+      parameters:
+        - $ref: '#/components/parameters/OrderIdsParam'
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  /api/orders/excel:
+    post:
+      description: 주문 엑셀 업로드
+      operationId: uploadOrderExcel
+      tags:
+        - Order
+      requestBody:
+        $ref: '#/components/requestBodies/OrderExcelRequest'
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  /api/orders/{order_id}/presigned-url:
+    get:
+      description: 주문 파일 업로드 URL 생성
+      operationId: createPresignedUrl
+      tags:
+        - Order
+      parameters:
+        - $ref: '#/components/parameters/OrderIdParam'
+        - $ref: '#/components/parameters/FileNameParam'
+      responses:
+        '200':
+          $ref: '#/components/responses/PresignedUrlResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  /api/logistics-centers:
+    get:
+      description: 물류센터 조회
+      operationId: listLogisticsCenters
+      tags:
+        - LogisticsCenter
+      parameters:
+        - $ref: '#/components/parameters/PageParam'
+        - $ref: '#/components/parameters/SizeParam'
+      responses:
+        '200':
+          $ref: '#/components/responses/LogisticsCenterListResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+    post:
+      description: 물류센터 생성
+      operationId: createLogisticsCenter
+      tags:
+        - LogisticsCenter
+      requestBody:
+        $ref: '#/components/requestBodies/LogisticsCenterRequest'
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+    delete:
+      description: 물류센터 전체 삭제
+      operationId: deleteAllLogisticsCenters
+      tags:
+        - LogisticsCenter
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  /api/logistics-centers/excel:
+    post:
+      description: 물류센터 엑셀 업로드
+      operationId: uploadLogisticsCenterExcel
+      tags:
+        - LogisticsCenter
+      requestBody:
+        $ref: '#/components/requestBodies/LogisticsCenterExcelRequest'
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  /api/customers:
+    get:
+      description: 고객 조회
+      operationId: listCustomers
+      tags:
+        - Customer
+      parameters:
+        - $ref: '#/components/parameters/PageParam'
+        - $ref: '#/components/parameters/SizeParam'
+      responses:
+        '200':
+          $ref: '#/components/responses/CustomerListResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+    post:
+      description: 고객 등록
+      operationId: registerCustomer
+      tags:
+        - Customer
+      requestBody:
+        $ref: '#/components/requestBodies/CustomerRequest'
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+    delete:
+      description: 고객 전체 삭제
+      operationId: deleteAllCustomers
+      tags:
+        - Customer
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  /api/customers/excel:
+    post:
+      description: 고객 엑셀 업로드
+      operationId: uploadCustomerExcel
+      tags:
+        - Customer
+      requestBody:
+        $ref: '#/components/requestBodies/CustomerExcelRequest'
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  /api/drivers:
+    get:
+      description: 운전자 조회
+      operationId: listDrivers
+      tags:
+        - Driver
+      parameters:
+        - $ref: '#/components/parameters/PageParam'
+        - $ref: '#/components/parameters/SizeParam'
+        - $ref: '#/components/parameters/DriverNameParam'
+      responses:
+        '200':
+          $ref: '#/components/responses/DriverListResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+    post:
+      description: 운전자 등록
+      operationId: registerDriver
+      tags:
+        - Driver
+      requestBody:
+        $ref: '#/components/requestBodies/DriverRequest'
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+    delete:
+      description: 운전자 전체 삭제
+      operationId: deleteAllDrivers
+      tags:
+        - Driver
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  /api/drivers/excel:
+    post:
+      description: 운전자 엑셀 업로드
+      operationId: uploadDriverExcel
+      tags:
+        - Driver
+      requestBody:
+        $ref: '#/components/requestBodies/DriverExcelRequest'
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  /api/drivers/signup:
+    post:
+      security: [ ]  # 인증 필요 없음
+      description: 운전자 회원 가입
+      operationId: signupDriver
+      tags:
+        - Driver
+      requestBody:
+        $ref: '#/components/requestBodies/DriverSignupRequest'
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  /api/drivers/invitations:
+    post:
+      description: 운전자 초대
+      operationId: inviteDriver
+      tags:
+        - Driver
+      requestBody:
+        $ref: '#/components/requestBodies/DriverInvitationRequest'
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  /api/drivers/invitations/excel:
+    post:
+      description: 운전자 초대 엑셀 업로드
+      operationId: uploadDriverInvitationExcel
+      tags:
+        - Driver
+      requestBody:
+        $ref: '#/components/requestBodies/DriverInvitationExcelRequest'
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  /api/drivers/invitations/{invitation_code}:
+    get:
+      security: [ ]  # 인증 필요 없음
+      description: |
+        운전자 초대 조회
+        문자로 전송된 키를 URL Encoding 하여 사용
+      operationId: getDriverInvitation
+      tags:
+        - Driver
+      parameters:
+        - $ref: '#/components/parameters/InvitationCodeParam'
+      responses:
+        '200':
+          $ref: '#/components/responses/DriverInvitationResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  /api/auth/login:
+    post:
+      security: [ ]  # 인증 필요 없음
+      description: 사용자 로그인
+      operationId: login
+      tags:
+        - Auth
+      requestBody:
+        $ref: '#/components/requestBodies/LoginRequest'
+      responses:
+        '200':
+          $ref: '#/components/responses/TokenResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  /api/auth/logout:
+    post:
+      description: |
+        - 사용자 로그아웃
+        - JWT 토큰 무효화가 불가능 하기 때문에 client 에서 토큰을 삭제한다.
+      operationId: logout
+      tags:
+        - Auth
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  /api/auth/refresh-token:
+    post:
+      security: [ ]  # 인증 필요 없음
+      description: 사용자 토큰 갱신
+      operationId: refreshToken
+      tags:
+        - Auth
+      requestBody:
+        $ref: '#/components/requestBodies/RefreshTokenRequest'
+      responses:
+        '200':
+          $ref: '#/components/responses/TokenResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  /api/auth/verification/email:
+    post:
+      security: [ ]  # 인증 필요 없음
+      description: Email 유효성 확인 코드가 포함된 메일 발송
+      operationId: requestEmailVerificationCode
+      tags:
+        - Auth
+      requestBody:
+        $ref: '#/components/requestBodies/EmailVerificationRequest'
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  /api/auth/verification/email/verify:
+    post:
+      security: [ ]  # 인증 필요 없음
+      description: Email 확인 코드 유효성 검사
+      operationId: verifyEmailVerificationCode
+      tags:
+        - Auth
+      requestBody:
+        $ref: '#/components/requestBodies/VerifyEmailRequest'
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  /api/auth/verification/sms:
+    post:
+      security: [ ]  # 인증 필요 없음
+      description: SMS 유효성 확인 코드가 포함된 SMS 발송
+      operationId: requestSmsVerificationCode
+      tags:
+        - Auth
+      requestBody:
+        $ref: '#/components/requestBodies/SmsVerificationRequest'
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  /api/auth/verification/sms/verify:
+    post:
+      security: [ ]  # 인증 필요 없음
+      description: SMS 확인 코드 유효성 검사
+      operationId: verifySmsVerificationCode
+      tags:
+        - Auth
+      requestBody:
+        $ref: '#/components/requestBodies/VerifySmsRequest'
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  /api/users/signup:
+    post:
+      security: [ ]  # 인증 필요 없음
+      description: 사용자 등록
+      operationId: signup
+      tags:
+        - User
+      requestBody:
+        $ref: '#/components/requestBodies/SignupRequest'
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  /api/users/withdrawal:
+    post:
+      description: 사용자 탈퇴
+      operationId: withdrawal
+      tags:
+        - User
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  /api/users/me:
+    get:
+      description: 내 정보 조회
+      operationId: getMe
+      tags:
+        - User
+      responses:
+        '200':
+          $ref: '#/components/responses/UserResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  /api/users/{user_id}:
+    put:
+      description: 사용자 수정
+      operationId: updateUser
+      tags:
+        - User
+      parameters:
+        - $ref: '#/components/parameters/UserIdParam'
+      requestBody:
+        $ref: '#/components/requestBodies/UserRequest'
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  /api/users/password/reset:
+    post:
+      description: 비밀번호 초기화
+      operationId: resetPassword
+      tags:
+        - User
+      requestBody:
+        $ref: '#/components/requestBodies/ResetPasswordRequest'
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  /api/users/password/search:
+    post:
+      security: [ ]  # 인증 필요 없음
+      description: 비밀번호 찾기
+      operationId: searchPassword
+      tags:
+        - User
+      requestBody:
+        $ref: '#/components/requestBodies/SearchPasswordRequest'
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  /api/address/geocode:
+    get:
+      description: |
+        - 주소로 좌표 검색
+        - 데이터 제공 업체의 제약조건으로 page 는 45까지, size 는 15까지만 가능
+      operationId: geocode
+      tags:
+        - Address
+      parameters:
+        - $ref: '#/components/parameters/AddressQueryParam'
+        - $ref: '#/components/parameters/PageParam'
+        - $ref: '#/components/parameters/SizeParam'
+      responses:
+        '200':
+          $ref: '#/components/responses/AddressListResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  /api/address/reverse-geocode:
+    get:
+      description: |
+        - 좌표로 주소 검색
+      operationId: reverseGeocode
+      tags:
+        - Address
+      parameters:
+        - $ref: '#/components/parameters/XParam'
+        - $ref: '#/components/parameters/YParam'
+      responses:
+        '200':
+          $ref: '#/components/responses/AddressListResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  /api/address/search:
+    get:
+      description: |
+        - 통합 주소 검색
+        - 데이터 제공 업체의 제약조건으로 page 는 45까지, size 는 15까지만 가능
+      operationId: searchAddress
+      tags:
+        - Address
+      parameters:
+        - $ref: '#/components/parameters/AddressQueryParam'
+        - $ref: '#/components/parameters/XParam'
+        - $ref: '#/components/parameters/YParam'
+        - $ref: '#/components/parameters/RadiusParam'
+        - $ref: '#/components/parameters/PageParam'
+        - $ref: '#/components/parameters/SizeParam'
+      responses:
+        '200':
+          $ref: '#/components/responses/AddressListResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  /api/inquiries:
+    post:
+      description: 문의 등록
+      operationId: createInquiry
+      tags:
+        - Inquiry
+      requestBody:
+        $ref: '#/components/requestBodies/InquiryRequest'
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+    get:
+      description: 문의 조회
+      operationId: listInquiries
+      tags:
+        - Inquiry
+      parameters:
+        - $ref: '#/components/parameters/PageParam'
+        - $ref: '#/components/parameters/SizeParam'
+        - $ref: '#/components/parameters/EmailParam'
+        - $ref: '#/components/parameters/PhoneNumberParam'
+      responses:
+        '200':
+          $ref: '#/components/responses/InquiryListResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  /api/inquiries/{inquiry_id}:
+    get:
+      description: 문의 조회
+      operationId: getInquiry
+      tags:
+        - Inquiry
+      parameters:
+        - $ref: '#/components/parameters/InquiryIdParam'
+      responses:
+        '200':
+          $ref: '#/components/responses/InquiryResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  /api/areas/districts:
+    get:
+      description: |
+        지역 조회
+        - 행정 구역 단위 목록 조회
+      operationId: listDistricts
+      tags:
+        - District
+      parameters:
+        - $ref: '#/components/parameters/AreaCodeQueryParam'
+        - $ref: '#/components/parameters/AreaLevelParam'
+        - $ref: '#/components/parameters/PageParam'
+        - $ref: '#/components/parameters/SizeParam'
+      responses:
+        '200':
+          $ref: '#/components/responses/DistrictListResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  /api/areas/districts/{area_code}:
+    get:
+      description: |
+        지역 조회
+        - 행정 구역 단위 단건 조회
+      operationId: getDistrict
+      tags:
+        - District
+      parameters:
+        - $ref: '#/components/parameters/AreaCodeParam'
+      responses:
+        '200':
+          $ref: '#/components/responses/DistrictResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  /api/areas/regions:
+    get:
+      description: |
+        권역 조회
+        - 로그인 한 사용자에게 등록된 권역만 조회
+      operationId: listRegions
+      tags:
+        - Region
+      parameters:
+        - $ref: '#/components/parameters/PageParam'
+        - $ref: '#/components/parameters/SizeParam'
+      responses:
+        '200':
+          $ref: '#/components/responses/RegionListResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+    post:
+      description: 권역 등록
+      operationId: createRegion
+      tags:
+        - Region
+      requestBody:
+        $ref: '#/components/requestBodies/RegionRequest'
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+    delete:
+      description: 권역 전체 삭제
+      operationId: deleteAllRegions
+      tags:
+        - Region
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+  /api/areas/regions/{region_id}:
+    put:
+      description: 권역 수정
+      operationId: updateRegion
+      tags:
+        - Region
+      parameters:
+        - $ref: '#/components/parameters/RegionIdParam'
+      requestBody:
+        $ref: '#/components/requestBodies/RegionRequest'
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+
+
+components:
+  schemas:
+    #----------------------------------------
+    # API fields
+    #----------------------------------------
+    Long:
+      type: integer
+      format: int64
+      example: 1
+    Integer:
+      type: integer
+      format: int32
+      example: 1
+    Float:
+      type: number
+      format: float
+      example: 1.5
+    Double:
+      type: number
+      format: double
+      example: 1.5
+    Boolean:
+      description: 참, 거짓
+      type: boolean
+      example: true
+    DateTime:
+      description: ISO 8601 포멧의 일시 (yyyy-MM-dd'T'HH:mm:ss.SSS'Z')
+      type: string
+      format: date-time
+      example: "2024-10-01T10:00:00.000Z"
+    StartDateTime:
+      description: ISO 8601 포멧의 시작 일시 (yyyy-MM-dd'T'HH:mm:ss.SSS'Z')
+      type: string
+      format: date-time
+      example: "2024-10-01T10:00:00.000Z"
+    EndDateTime:
+      description: ISO 8601 포멧의 종료 일시 (yyyy-MM-dd'T'HH:mm:ss.SSS'Z')
+      type: string
+      format: date-time
+      example: "2024-10-01T10:00:00.000Z"
+    Date:
+      type: string
+      format: date
+      example: "2024-10-01"
+    String:
+      type: string
+      example: "foo"
+    Password:
+      type: string
+      description: Password must contain at least one uppercase letter, one special character, and one digit.
+      minLength: 8
+      maxLength: 32
+      pattern: "^(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*]).+$"
+      example: "P@ssw0rd!"
+    UUID:
+      type: string
+      format: uuid
+      example: c9106593-2d6c-40eb-8504-66b0ef41ad2d
+    Email:
+      type: string
+      format: email
+      description: User's email address
+      example: "user@example.com"
+      minLength: 5
+      maxLength: 254
+      pattern: "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"
+    PhoneNumber:
+      type: string
+      description: User's phone number in international format (e.g., +1234567890)
+      example: "01012345678"
+      minLength: 9
+      maxLength: 15
+      pattern: "^(01[016789])\\d{3,4}\\d{4}$"
+    AddressQuery:
+      type: string
+      description: 주소 검색어
+      example: "서울특별시 강남구 역삼동 123-45"
+      minLength: 2
+    Token:
+      type: string
+      description: JWT token
+      example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+
+
+    #----------------------------------------
+    # Common Model
+    #----------------------------------------
+
+    LongArray:
+      type: object
+      properties:
+        ids:
+          type: array
+          items:
+            $ref: '#/components/schemas/Long'
+    ProblemDetails:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+          example: oaasis/constraint-violation
+        status:
+          type: integer
+          format: int32
+          example: 400
+        title:
+          type: string
+          example: 제출한 요청이 유효하지 않습니다
+        code:
+          type: string
+          example: 0000
+        detail:
+          type: string
+          example: 제출한 요청이 유효하지 않습니다
+        instance:
+          type: string
+          format: uri
+          example: /api/users
+        field_errors:
+          type: array
+          nullable: true
+          items:
+            $ref: '#/components/schemas/FieldError'
+    FieldError:
+      type: object
+      properties:
+        field:
+          type: string
+        message:
+          $ref: '#/components/schemas/ErrorCode'
+    ErrorCode:
+      type: string
+      example:
+        - NotNull
+        - Size
+    Page:
+      type: object
+      properties:
+        page_number:
+          type: integer
+          format: int32
+          default: 1
+          example: 1
+        page_size:
+          type: integer
+          format: int32
+          default: 20
+          example: 20
+        total_elements:
+          type: integer
+          format: int64
+          example: 100
+        total_pages:
+          type: integer
+          format: int32
+          example: 100
+    Longitude:
+      type: string
+      pattern: '^(-?(180(\.0{1,14})?|1[0-7][0-9](\.\d{1,14})?|[1-9]?[0-9](\.\d{1,14})?))$'
+      description: '경도, x (허용 범위: -180 ~ 180)'
+      example: 127.052222794462
+    Latitude:
+      type: string
+      pattern: '^(-?(90(\.0{1,14})?|[1-8]?[0-9](\.\d{1,14})?))$'
+      description: '위도, y (허용 범위: -90 ~ 90)'
+      example: 37.5050979384459
+    Location:
+      type: object
+      properties:
+        x:
+          $ref: '#/components/schemas/Longitude'
+        y:
+          $ref: '#/components/schemas/Latitude'
+      required:
+        - x
+        - y
+    Coordinates:
+      type: array
+      minItems: 2
+      maxItems: 2
+      items:
+        type: number
+        format: double
+      example: [ 127.065326637295, 37.5065841136869 ]
+    GeometryType:
+      type: string
+      enum: [ Point, MultiPoint, LineString, MultiLineString, Polygon, MultiPolygon, GeometryCollection ]
+      example: Point
+    GeoJsonFeature:
+      type: object
+      description: GeoJSON Root Object
+      properties:
+        type:
+          type: string
+          default: 'Feature'
+          readOnly: true
+        geometry:
+          $ref: "#/components/schemas/Geometry"
+        properties:
+          type: object
+          additionalProperties:
+            type: object
+    Geometry:
+      type: object
+      description: GeoJSON Geometry
+      oneOf:
+        - $ref: '#/components/schemas/Point'
+        - $ref: '#/components/schemas/MultiPoint'
+        - $ref: '#/components/schemas/LineString'
+        - $ref: '#/components/schemas/MultiLineString'
+        - $ref: '#/components/schemas/Polygon'
+        - $ref: '#/components/schemas/MultiPolygon'
+        - $ref: '#/components/schemas/GeometryCollection'
+      discriminator:
+        propertyName: type
+    Point:
+      type: object
+      description: 'GeometryType: Point'
+      properties:
+        type:
+          type: string
+          default: Point
+          readOnly: true
+        coordinates:
+          $ref: '#/components/schemas/Coordinates'
+      required: [ type, coordinates ]
+    MultiPoint:
+      type: object
+      description: 'GeometryType: MultiPoint'
+      properties:
+        type:
+          type: string
+          default: MultiPoint
+          readOnly: true
+        coordinates:
+          type: array
+          items:
+            $ref: '#/components/schemas/Coordinates'
+          example: [ [ 127.065326637295, 37.5065841136869 ], [ 127.066558844809, 37.5086088846187 ] ]
+      required: [ type, coordinates ]
+    LineString:
+      type: object
+      description: 'GeometryType: LineString'
+      properties:
+        type:
+          type: string
+          default: LineString
+          readOnly: true
+        coordinates:
+          type: array
+          minItems: 2
+          items:
+            $ref: '#/components/schemas/Coordinates'
+          example: [ [ 127.065326637295, 37.5065841136869 ], [ 127.066558844809, 37.5086088846187 ] ]
+      required: [ type, coordinates ]
+    MultiLineString:
+      type: object
+      description: 'GeometryType: MultiLineString'
+      properties:
+        type:
+          type: string
+          default: MultiLineString
+          readOnly: true
+        coordinates:
+          type: array
+          items:
+            type: array
+            minItems: 2
+            items:
+              $ref: '#/components/schemas/Coordinates'
+          example: [ [ [ 127.065326637295, 37.5065841136869 ], [ 127.066558844809, 37.5086088846187 ] ], [ [ 127.065327020175, 37.4974180026259 ], [ 127.060358414855, 37.4936757916501 ] ] ]
+      required: [ type, coordinates ]
+    Polygon:
+      type: object
+      description: 'GeometryType: Polygon'
+      properties:
+        type:
+          type: string
+          default: Polygon
+          readOnly: true
+        coordinates:
+          type: array
+          items:
+            type: array
+            minItems: 4
+            items:
+              $ref: '#/components/schemas/Coordinates'
+          example: [ [ [ 127.065326637295, 37.5065841136869 ], [ 127.066558844809, 37.5086088846187 ], [ 127.065327020175, 37.4974180026259 ], [ 127.060358414855, 37.4936757916501 ] ] ]
+      required: [ type, coordinates ]
+    MultiPolygon:
+      type: object
+      description: 'GeometryType: MultiPolygon'
+      properties:
+        type:
+          type: string
+          default: MultiPolygon
+          readOnly: true
+        coordinates:
+          type: array
+          items:
+            type: array
+            items:
+              type: array
+              minItems: 4
+              items:
+                $ref: '#/components/schemas/Coordinates'
+          example: [ [ [ [ 127.065326637295, 37.5065841136869 ], [ 127.066558844809, 37.5086088846187 ], [ 127.065327020175, 37.4974180026259 ], [ 127.060358414855, 37.4936757916501 ] ] ] ]
+      required: [ type, coordinates ]
+    GeometryCollection:
+      type: object
+      description: 'GeometryType: GeometryCollection'
+      properties:
+        type:
+          type: string
+          default: GeometryCollection
+          readOnly: true
+        geometries:
+          type: array
+          items:
+            $ref: '#/components/schemas/Geometry'
+      required: [ type, geometries ]
+    ZipCode:
+      type: string
+      description: 우편번호
+      example: 04523
+    Address:
+      type: object
+      properties:
+        entries:
+          type: array
+          items:
+            $ref: '#/components/schemas/AddressEntry'
+        provider:
+          $ref: '#/components/schemas/ServiceProvider'
+    ServiceProvider:
+      description: |
+        - 0개 이상 제출 가능(기본값: KAKAO); 제출한 순서대로 수행; 1번 provider의 결과값이 없으면 2번 provider 사용
+      type: string
+      enum:
+        - KAKAO
+        - NAVER
+        - SKT
+        - INAVI
+    AdditionalInfo:
+      description: |
+        - MOUNTAIN:산
+        - UNDER_GROUND:지하
+        - AIR:공중
+      type: string
+      enum:
+        - MOUNTAIN
+        - UNDER_GROUND
+        - AIR
+      example: MOUNTAIN
+    AddressType:
+      description: |
+        - ROAD_NAME:도로명
+        - ADMIN:행정동
+        - LEGAL:법정동
+        - RAW:원본
+        - 행정동 주소를 제출했으나 정제엔진에서 법정동으로 매칭할 수 있으면 결과 값은 LEGAL
+        - 행정동 주소를 제출했는데 정제엔진에서 법정동 매칭할 수 없거나, 정제 실패할 경우에는 ADMIN
+      type: string
+      enum:
+        - ROAD_NAME
+        - ADMIN
+        - LEGAL
+        - RAW
+    AddressEntry:
+      type: object
+      properties:
+        address_type:
+          $ref: '#/components/schemas/AddressType'
+        additional_info:
+          $ref: '#/components/schemas/AdditionalInfo'
+        building_name:
+          type: string
+          example: 한국통신사업자연합회빌딩
+          description: 건물번호
+        detail:
+          type: string
+          example: 5층 509호
+          description: 상세주소
+        main_area_number:
+          type: string
+          example: 435
+          description: 본번
+        sub_area_number:
+          type: string
+          example: ""
+          description: 부번
+        raw_address:
+          type: string
+          example: 서울특별시 강남구 봉은사로 435
+        area_1depth_name:
+          type: string
+          example: 서울특별시
+          description: 시도
+        area_2depth_name:
+          type: string
+          example: 강남구
+          description: 시군구
+        area_3depth_name:
+          type: string
+          example: ""
+          description: 읍면동
+        area_4depth_name:
+          type: string
+          example: 봉은사로
+          description: 도로명, 법정리
+        area_code:
+          type: string
+          example: 116803122010
+          description: 행정구역코드
+        y:
+          $ref: '#/components/schemas/Latitude'
+        x:
+          $ref: '#/components/schemas/Longitude'
+        zip_code:
+          $ref: '#/components/schemas/ZipCode'
+
+    #----------------------------------------
+    # API Model
+    #----------------------------------------
+    DateDuration:
+      type: object
+      properties:
+        start_date:
+          $ref: '#/components/schemas/StartDateTime'
+        end_date:
+          $ref: '#/components/schemas/EndDateTime'
+    Region:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          example: "Region A"
+        created_at:
+          $ref: '#/components/schemas/DateTime'
+        last_modified_at:
+          $ref: '#/components/schemas/DateTime'
+        districts:
+          type: array
+          items:
+            $ref: '#/components/schemas/District'
+        drivers:
+          type: array
+          items:
+            $ref: '#/components/schemas/Driver'
+    District:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        area_code:
+          type: string
+          example: "123456"
+        name:
+          type: string
+          example: "District A"
+        created_at:
+          $ref: '#/components/schemas/DateTime'
+        last_modified_at:
+          $ref: '#/components/schemas/DateTime'
+    User:
+      type: object
+      description: 사용자 정보
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        login_id:
+          type: string
+          example: "user123"
+        username:
+          type: string
+          example: "JohnDoe"
+        password:
+          $ref: '#/components/schemas/Password'
+        email:
+          $ref: '#/components/schemas/Email'
+        phone_number:
+          $ref: '#/components/schemas/PhoneNumber'
+        ip_address:
+          type: string
+          example: "192.168.1.1"
+        last_logged_in_at:
+          $ref: '#/components/schemas/DateTime'
+        created_at:
+          $ref: '#/components/schemas/DateTime'
+        last_modified_at:
+          $ref: '#/components/schemas/DateTime'
+        organization:
+          $ref: '#/components/schemas/Organization'
+        user_rule:
+          $ref: '#/components/schemas/UserRule'
+    UserHistory:
+      type: object
+      properties:
+        contents:
+          type: string
+        memo:
+          type: string
+        ip_address:
+          type: string
+          example: "192.168.1.1"
+        created_at:
+          $ref: '#/components/schemas/DateTime'
+    VehicleType:
+      type: string
+      enum: [ PASSENGER_CAR, TRUCK ]
+      description: |
+        - PASSENGER_CAR: 승용차
+        - TRUCK: 화물차
+    Driver:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          example: "John Doe"
+        phone_number:
+          $ref: '#/components/schemas/PhoneNumber'
+        address:
+          type: string
+          example: "123 Main St"
+        address2:
+          type: string
+          example: "Apt 4B"
+        vehicle_type:
+          $ref: '#/components/schemas/VehicleType'
+        max_capacity:
+          type: integer
+          example: 4
+        work_start_time:
+          $ref: '#/components/schemas/DateTime'
+        work_end_time:
+          $ref: '#/components/schemas/DateTime'
+        note:
+          type: string
+          example: "Experienced driver"
+        created_at:
+          $ref: '#/components/schemas/DateTime'
+        last_modified_at:
+          $ref: '#/components/schemas/DateTime'
+        organization:
+          $ref: '#/components/schemas/Organization'
+        regions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Region'
+    Customer:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          example: "Jane Doe"
+        phone_number:
+          type: string
+          description: The contact information of the customer.
+          example: "555-1234"
+        address:
+          type: string
+          description: The primary address of the customer.
+          example: "123 Main St"
+        address2:
+          type: string
+          description: The secondary address of the customer.
+          example: "Apt 4B"
+        location:
+          $ref: '#/components/schemas/Location'
+        parking_memo:
+          type: string
+          description: Parking instructions or memo for the customer.
+          example: "Park in the rear lot"
+        condition:
+          type: string
+          description: The condition or status of the customer.
+          example: "Active"
+        eta:
+          type: integer
+          description: Estimated time of arrival in minutes.
+          example: 15
+        created_at:
+          type: string
+          format: date-time
+          example: "2023-10-01T10:00:00.000Z"
+        last_modified_at:
+          type: string
+          format: date-time
+          example: "2023-10-01T12:00:00.000Z"
+        organization:
+          $ref: '#/components/schemas/Organization'
+    RouteStatus:
+      type: string
+      enum:
+        - NOT_STARTED
+        - ONGOING
+        - COMPLETED
+        - FAILED
+      description: The status of the route.
+    Route:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: The unique identifier of the route.
+        name:
+          type: string
+          description: The name of the route.
+        status:
+          $ref: '#/components/schemas/RouteStatus'
+        due_date:
+          $ref: '#/components/schemas/DateTime'
+        path_points:
+          type: array
+          items:
+            $ref: '#/components/schemas/Location'
+          description: The list of path points for the route.
+        metrics:
+          $ref: '#/components/schemas/RouteMetrics'
+        load_weight_kg:
+          type: integer
+          description: The load weight in kilograms.
+        output_delivery_start_time:
+          $ref: '#/components/schemas/DateTime'
+        output_delivery_completion_time:
+          $ref: '#/components/schemas/DateTime'
+        actual_delivery_started_at:
+          $ref: '#/components/schemas/DateTime'
+        actual_delivery_completed_at:
+          $ref: '#/components/schemas/DateTime'
+        created_at:
+          $ref: '#/components/schemas/DateTime'
+        last_modified_at:
+          $ref: '#/components/schemas/DateTime'
+        organization:
+          $ref: '#/components/schemas/Organization'
+        driver:
+          $ref: '#/components/schemas/Driver'
+        legs:
+          type: array
+          items:
+            $ref: '#/components/schemas/Leg'
+          description: The list of legs for the route.
+        optimized_orders:
+          type: array
+          items:
+            $ref: '#/components/schemas/Order'
+          description: The list of optimized orders for the route.
+      required:
+        - status
+        - path_points
+        - created_at
+        - last_modified_at
+        - legs
+        - optimized_orders
+    UserRule:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        # TO-DO: rule 필드 필요 여부 확인
+        rule:
+          type: integer
+          example: 2
+        type1:
+          type: integer
+          example: 1
+        type2:
+          type: integer
+          example: 2
+        type3:
+          type: integer
+          example: 3
+        created_at:
+          type: string
+          format: date-time
+          example: "2023-10-01T10:00:00.000Z"
+        last_modified_at:
+          type: string
+          format: date-time
+          example: "2023-10-01T12:00:00.000Z"
+    DeliveryStatus:
+      type: string
+      description: |
+        - READY: 배송 준비
+        - IN_TRANSIT: 배송 중
+        - DELIVERED: 배송 완료
+        - FAILED: 배송 실패
+      enum: [ 'READY', 'IN_TRANSIT', 'DELIVERED', 'FAILED' ]
+      example: 'READY'
+    DispatchStatus:
+      type: string
+      description: |
+        - PENDING: 배차 대기
+        - DISPATCHED: 배차 완료
+        - FAILED: 배차 실패
+      enum: [ 'PENDING', 'DISPATCHED', 'FAILED' ]
+      example: 'PENDING'
+    Order:
+      type: object
+      description: |
+        - 주문 정보
+        - 모든 시간은 ISO 8601 포멧의 일시 (yyyy-MM-dd'T'HH:mm:ss.SSS'Z')로 표시
+      properties:
+        id:
+          type: integer
+          format: int64
+        delivery_status:
+          $ref: '#/components/schemas/DeliveryStatus'
+        dispatch_status:
+          $ref: '#/components/schemas/DispatchStatus'
+        ordered_at:
+          $ref: '#/components/schemas/DateTime'
+        order_number:
+          type: string
+        dest_address:
+          type: string
+        dest_address2:
+          type: string
+        dest_location:
+          $ref: '#/components/schemas/Location'
+        item_name:
+          type: string
+        item_volume:
+          type: integer
+        item_count:
+          type: integer
+        preferred_date:
+          $ref: '#/components/schemas/DateTime'
+        preferred_start_time:
+          $ref: '#/components/schemas/DateTime'
+        preferred_end_time:
+          $ref: '#/components/schemas/DateTime'
+        stopover_duration:
+          type: integer
+          description: Stopover duration in minutes
+          default: 5
+        order_note:
+          type: string
+          description: Order note or memo
+        delivered_at:
+          $ref: '#/components/schemas/DateTime'
+        created_at:
+          $ref: '#/components/schemas/DateTime'
+        last_modified_at:
+          $ref: '#/components/schemas/DateTime'
+        customer:
+          $ref: '#/components/schemas/Customer'
+        organization:
+          $ref: '#/components/schemas/Organization'
+        delivery_completion_info:
+          $ref: '#/components/schemas/DeliveryCompletionInfo'
+      required:
+        - dest_address
+    DeliveryCompletionInfo:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/Long'
+        note:
+          type: string
+          example: "Delivered to the front door"
+        created_at:
+          $ref: '#/components/schemas/DateTime'
+        last_modified_at:
+          $ref: '#/components/schemas/DateTime'
+        delivery_completion_photos:
+          type: array
+          items:
+            $ref: '#/components/schemas/DeliveryCompletionPhoto'
+    DeliveryCompletionPhoto:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/Long'
+        base_path:
+          type: string
+          example: "https://example.com"
+        image_url:
+          type: string
+          example: "/attachments/orders/123/photo.jpg"
+        created_at:
+          $ref: '#/components/schemas/DateTime'
+    LogisticsCenter:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        address:
+          type: string
+        address2:
+          type: string
+        memo:
+          type: string
+        location:
+          $ref: '#/components/schemas/Location'
+        created_at:
+          $ref: '#/components/schemas/DateTime'
+        last_modified_at:
+          $ref: '#/components/schemas/DateTime'
+        organization:
+          $ref: '#/components/schemas/Organization'
+    LogisticsCenterWithMetrics:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          example: "Logistics Center A"
+        address:
+          type: string
+          example: "대전광역시 유성구 문지로 193"
+        location:
+          $ref: '#/components/schemas/Location'
+        logistics_center_metrics:
+          $ref: '#/components/schemas/LogisticsCenterMetrics'
+    LogisticsCenterMetrics:
+      type: object
+      properties:
+        assigned_drivers_distance_meter:
+          type: number
+          format: double
+          example: 1000.0
+        assigned_drivers_co2_emission_gram:
+          type: number
+          format: double
+          example: 100.0
+        delivery_completion_time:
+          $ref: '#/components/schemas/DateTime'
+    RouteLogisticsCenter:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        distance:
+          type: number
+          format: float
+        co2_emission:
+          type: number
+          format: float
+        delivery_completion_time:
+          $ref: '#/components/schemas/DateTime'
+        created_at:
+          $ref: '#/components/schemas/DateTime'
+        last_modified_at:
+          $ref: '#/components/schemas/DateTime'
+        route:
+          $ref: '#/components/schemas/Route'
+        logistics_center:
+          $ref: '#/components/schemas/LogisticsCenter'
+    RouteOptimizationRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the route optimization.
+          example: '20241123AM09:00#1'
+        delivery_start_time:
+          $ref: '#/components/schemas/DateTime'
+        order_ids:
+          type: string
+          description: Comma separated Order IDs
+          example: "ORD123,ORD456"
+        driver_ids:
+          type: string
+          description: Comma separated Driver IDs
+          example: "DRV123,DRV456"
+        logistics_center_ids:
+          type: string
+          description: Comma separated Logistics Center IDs
+          example: "LC123,LC456"
+        options:
+          $ref: '#/components/schemas/RouteOptimizationOptions'
+    RouteOptimizationWithOrderRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the route.
+        due_date:
+          $ref: '#/components/schemas/DateTime'
+        options:
+          $ref: '#/components/schemas/SimpleRouteOptimizationOptions'
+        origin:
+          $ref: '#/components/schemas/Order'
+          description: The origin order.
+        destination:
+          $ref: '#/components/schemas/Order'
+          description: The destination order.
+        intermediate_stops:
+          type: array
+          items:
+            $ref: '#/components/schemas/Order'
+          description: List of intermediate stop orders.
+      required:
+        - name
+        - due_date
+        - origin
+        - intermediate_stops
+    ObjectiveFunctionOptions:
+      type: object
+      description: |
+        Optimization objective functions
+        세가지 옵션의 합이 1이다.
+      properties:
+        driver_total_distance:
+          type: number
+          format: double
+          description: |
+            The weight of the driver total distance.
+            0 ~ 1 사이의 부동소수 값
+          example: 1.0
+        delivery_completion_time:
+          type: number
+          format: double
+          description: |
+            The weight of the delivery completion time.
+            0 ~ 1 사이의 부동소수 값
+          example: 0.0
+      required:
+        - driver_total_distance
+        - delivery_completion_time
+    ConstraintOptions:
+      type: object
+      description: |
+        Optimization constraints
+        두개 이상의 조건이 동시에 true 가 될 수 있다
+      properties:
+        driver_work_time_uniformity:
+          type: boolean
+          description: 기사 운행 시간 균등 조건
+          example: true
+        driver_workload_uniformity:
+          type: boolean
+          description: 기사 운행 물량 균등 조건
+          example: false
+        driver_delivery_zone_satisfying:
+          type: boolean
+          description: 기사 배송 권역 준수 조건
+          example: false
+      required:
+        - driver_work_time_uniformity
+        - driver_work_load_uniformity
+        - driver_delivery_zone_satisfying
+    TimeOptions:
+      type: object
+      description: |
+        - Time options for optimization
+        - 요청에 포함된 주문 중 하나라도 선호 시간이 설정되어 있으면 delivery_start_time 옵션이 설정되어야 한다.
+      properties:
+        time_limit:
+          type: integer
+          format: int32
+          description: Time limit for optimization in seconds
+        delivery_start_time:
+          $ref: '#/components/schemas/DateTime'
+    RouteOptimizationOptions:
+      type: object
+      properties:
+        objective_function_options:
+          $ref: '#/components/schemas/ObjectiveFunctionOptions'
+        constraint_options:
+          $ref: '#/components/schemas/ConstraintOptions'
+        time_limit:
+          type: integer
+          description: Time limit for optimization in seconds
+          example: 10
+    SimpleRouteOptimizationOptions:
+      type: object
+      properties:
+        objective_function_options:
+          $ref: '#/components/schemas/ObjectiveFunctionOptions'
+        time_options:
+          $ref: '#/components/schemas/TimeOptions'
+    LogisticsCenterAssignedInfoWithMetrics:
+      type: object
+      properties:
+        logistics_center_with_metrics:
+          $ref: '#/components/schemas/LogisticsCenterWithMetrics'
+        driver_with_assigned_orders:
+          type: array
+          items:
+            $ref: '#/components/schemas/DriverWithMetrics'
+      required:
+        - logistics_center_with_metrics
+        - driver_with_assigned_orders
+    DriverWithMetrics:
+      type: object
+      properties:
+        driver_id:
+          type: integer
+          format: int64
+          example: 1
+        driver_name:
+          type: string
+          example: "John Doe"
+        driver_metrics:
+          $ref: '#/components/schemas/DriverMetrics'
+        order_with_metrics:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderWithMetrics'
+        driver_route_coordinates:
+          type: array
+          minItems: 2
+          items:
+            $ref: '#/components/schemas/Coordinates'
+      required:
+        - driver
+        - orders
+    DriverMetrics:
+      type: object
+      properties:
+        distance_meter:
+          type: number
+          format: double
+          example: 1000.0
+        co2_emission_gram:
+          type: number
+          format: double
+          example: 100.0
+        time_spend_seconds:
+          type: integer
+          format: int32
+          example: 100
+        delivery_completion_time:
+          $ref: '#/components/schemas/DateTime'
+        load_weight_kg:
+          type: integer
+          format: int32
+          example: 100
+    OrderWithMetrics:
+      type: object
+      properties:
+        order_id:
+          type: integer
+          format: int64
+        customer_name:
+          type: string
+        dest_address:
+          type: string
+        dest_address2:
+          type: string
+        dest_location:
+          $ref: '#/components/schemas/Location'
+        order_metrics:
+          $ref: '#/components/schemas/OrderMetrics'
+      required:
+        - order_id
+        - customer_name
+        - dest_address
+        - dest_location
+    OrderMetrics:
+      type: object
+      properties:
+        driver_arrival_time:
+          $ref: '#/components/schemas/DateTime'
+        driver_departure_time:
+          $ref: '#/components/schemas/DateTime'
+        distance_from_previous:
+          type: number
+          format: double
+          description: Distance from the previous order in meters
+          example: 1000.0
+    LogisticsCenterRequest:
+      type: object
+      description: Logistics Center 등록 수정 요청
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: The unique identifier of the logistics center.
+          example: 1
+        name:
+          type: string
+          description: The name of the logistics center.
+          example: "Main Warehouse"
+        address:
+          type: string
+          description: The primary address of the logistics center.
+          example: "123 Main St"
+        address2:
+          type: string
+          description: The secondary address of the logistics center.
+          example: "Suite 100"
+        memo:
+          type: string
+          description: Additional notes or memo about the logistics center.
+          example: "Open 24/7"
+    DriverInvitationRequest:
+      type: object
+      description: Invite Driver Data Transfer Object
+      properties:
+        name:
+          type: string
+          description: The name of the driver.
+          example: "John Doe"
+        phone_number:
+          $ref: '#/components/schemas/PhoneNumber'
+    SignupRequest:
+      type: object
+      description: |
+        Signup Data Transfer Object
+        Email 을 login_id 로 사용하는 경우 login_id 는 email 과 같아야 한다.
+        Cellphone 을 login_id 로 사용하는 경우 login_id 는 phone_number 와 같아야 한다.
+        그외의 경우 login_id 는 email 과 phone_number 와 다를 수 있다.
+      properties:
+        login_id:
+          type: string
+          description: email or phone number.
+          example: "johndoe"
+        username:
+          type: string
+          description: The username of the user.
+          example: "John Doe"
+        password:
+          $ref: '#/components/schemas/Password'
+        phone_number:
+          $ref: '#/components/schemas/PhoneNumber'
+        email:
+          $ref: '#/components/schemas/Email'
+        organization:
+          $ref: '#/components/schemas/Organization'
+      required:
+        - login_id
+        - username
+        - password
+    ResetPasswordRequest:
+      type: object
+      description: Reset Password Data Transfer Object
+      properties:
+        login_id:
+          type: string
+          description: The login ID of the user.
+          example: "johndoe"
+        old_password:
+          $ref: '#/components/schemas/Password'
+        new_password:
+          $ref: '#/components/schemas/Password'
+      required:
+        - loginId
+        - email
+    SearchPasswordRequest:
+      type: object
+      description: Search Password Data Transfer Object
+      properties:
+        email:
+          $ref: '#/components/schemas/Email'
+        phone_number:
+          $ref: '#/components/schemas/PhoneNumber'
+      oneOf:
+        - required: [ email ]
+        - required: [ phoneNumber ]
+    EmailVerificationRequest:
+      type: object
+      description: Validate user data request object
+      properties:
+        email:
+          $ref: '#/components/schemas/Email'
+      required: [ email ]
+    SmsVerificationRequest:
+      type: object
+      description: Validate user data request object
+      properties:
+        phone_number:
+          $ref: '#/components/schemas/PhoneNumber'
+      required: [ phoneNumber ]
+    VerifyEmailRequest:
+      type: object
+      description: Validate user data request object
+      properties:
+        email:
+          $ref: '#/components/schemas/Email'
+        code:
+          type: string
+          description: The verification code.
+          example: "123456"
+      required: [ email, code ]
+    VerifySmsRequest:
+      type: object
+      description: Validate user data request object
+      properties:
+        phone_number:
+          $ref: '#/components/schemas/PhoneNumber'
+        code:
+          type: string
+          description: The verification code.
+          example: "123456"
+      required: [ phone_number, code ]
+    Organization:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          example: "ExampleCorp"
+        business_registration_number:
+          type: string
+          example: "1234567890"
+        created_at:
+          $ref: '#/components/schemas/DateTime'
+        last_modified_at:
+          $ref: '#/components/schemas/DateTime'
+      required:
+        - name
+        - business_registration_number
+    UserListResponse:
+      type: object
+      properties:
+        contents:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+        page:
+          $ref: '#/components/schemas/Page'
+    RouteListResponse:
+      type: object
+      properties:
+        contents:
+          type: array
+          items:
+            $ref: '#/components/schemas/Route'
+        page:
+          $ref: '#/components/schemas/Page'
+    RouteOptimizationJobIdResponse:
+      type: object
+      properties:
+        job_id:
+          type: string
+          example: "JOB123"
+    RouteOptimizationStatus:
+      type: string
+      enum: [ 'ACCEPTED', 'PREPROCESS', 'OPTIMIZE', 'POSTPROCESS', 'COMPLETE', 'ERROR' ]
+      example: 'ACCEPTED'
+    RouteOptimizationResponse:
+      type: object
+      properties:
+        job_id:
+          type: string
+          example: "JOB123"
+        status:
+          $ref: '#/components/schemas/RouteOptimizationStatus'
+        contents:
+          $ref: '#/components/schemas/RouteOptimizationResult'
+    RouteOptimizationResult:
+      type: object
+      description: Routing Engine Result
+      properties:
+        route_id:
+          type: integer
+          format: int64
+          example: 1
+        user_id:
+          type: integer
+          format: int64
+          example: 1
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/LogisticsCenterAssignedInfoWithMetrics'
+        delivery_start_time:
+          $ref: '#/components/schemas/DateTime'
+        delivery_completion_time:
+          $ref: '#/components/schemas/DateTime'
+      required:
+        - user_id
+        - results
+    UserRuleListResponse:
+      type: object
+      properties:
+        contents:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserRule'
+        page:
+          $ref: '#/components/schemas/Page'
+    OrderListResponse:
+      type: object
+      properties:
+        contents:
+          type: array
+          items:
+            $ref: '#/components/schemas/Order'
+        page:
+          $ref: '#/components/schemas/Page'
+    LogisticsCenterListResponse:
+      type: object
+      properties:
+        contents:
+          type: array
+          items:
+            $ref: '#/components/schemas/LogisticsCenter'
+        page:
+          $ref: '#/components/schemas/Page'
+    CustomerListResponse:
+      type: object
+      properties:
+        contents:
+          type: array
+          items:
+            $ref: '#/components/schemas/Customer'
+        page:
+          $ref: '#/components/schemas/Page'
+    DriverListResponse:
+      type: object
+      properties:
+        contents:
+          type: array
+          items:
+            $ref: '#/components/schemas/Driver'
+        page:
+          $ref: '#/components/schemas/Page'
+    DriverSignupRequest:
+      allOf:
+        - $ref: '#/components/schemas/SignupRequest'
+    TokenResponse:
+      type: object
+      properties:
+        access_token:
+          $ref: '#/components/schemas/Token'
+        refresh_token:
+          $ref: '#/components/schemas/Token'
+    AddressListResponse:
+      type: object
+      properties:
+        contents:
+          type: array
+          items:
+            $ref: '#/components/schemas/Address'
+        page:
+          $ref: '#/components/schemas/Page'
+    DriverInvitationResponse:
+      type: object
+      properties:
+        organization:
+          $ref: '#/components/schemas/Organization'
+        name:
+          type: string
+          example: "John Doe"
+        phone_number:
+          $ref: '#/components/schemas/PhoneNumber'
+        email:
+          $ref: '#/components/schemas/Email'
+      required:
+        - organization
+        - phone_number
+    PresignedUrlResponse:
+      type: object
+      description: AWS S3 Presigned URL Response
+      properties:
+        url:
+          type: string
+          example: "https://example.com"
+    InquiryRequest:
+      type: object
+      description: 문의하기 데이터 전송 객체
+      properties:
+        phone_number:
+          $ref: '#/components/schemas/PhoneNumber'
+        email:
+          $ref: '#/components/schemas/Email'
+        message:
+          $ref: '#/components/schemas/String'
+      required:
+        - message
+    Inquiry:
+      type: object
+      description: 문의하기 데이터 전송 객체
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          $ref: '#/components/schemas/String'
+        email:
+          $ref: '#/components/schemas/Email'
+        phone_number:
+          $ref: '#/components/schemas/PhoneNumber'
+        message:
+          $ref: '#/components/schemas/String'
+        created_at:
+          $ref: '#/components/schemas/DateTime'
+      required:
+        - message
+    InquiryListResponse:
+      type: object
+      properties:
+        contents:
+          type: array
+          items:
+            $ref: '#/components/schemas/Inquiry'
+        page:
+          $ref: '#/components/schemas/Page'
+    OrderDispatchStatusRequest:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/Long'
+        dispatch_status:
+          $ref: '#/components/schemas/DispatchStatus'
+      required:
+        - id
+        - dispatch_status
+    OrderDeliveryStatusRequest:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/Long'
+        delivery_status:
+          $ref: '#/components/schemas/DeliveryStatus'
+        attached_file_url:
+          type: string
+          description: presigned url 에 업로드 한 후 결과 URL 을 전달
+      required:
+        - id
+        - delivery_status
+    DistrictListResponse:
+      type: object
+      description: 지역 목록 응답
+      properties:
+        contents:
+          type: array
+          items:
+            $ref: '#/components/schemas/District'
+        page:
+          $ref: '#/components/schemas/Page'
+    RegionListResponse:
+      type: object
+      description: 권역 목록 응답
+      properties:
+        contents:
+          type: array
+          items:
+            $ref: '#/components/schemas/Region'
+        page:
+          $ref: '#/components/schemas/Page'
+    RegionRequest:
+      type: object
+      description: |
+        - 권역 등록 수정 요청
+        - 권역 수정 시 driverIds, districtIds 에 포함된 ID 에 해당하는 객체로 대체된다
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: The unique identifier of the region.
+          example: 1
+        name:
+          type: string
+          description: The name of the region.
+          example: "Downtown"
+        area_code:
+          type: string
+          description: The area code of the region.
+          example: "12345"
+        driverIds:
+          type: array
+          items:
+            $ref: '#/components/schemas/Long'
+          example: [ 1, 2, 3 ]
+        districtIds:
+          type: array
+          items:
+            $ref: '#/components/schemas/Long'
+          example: [ 1, 2, 3 ]
+    Stops:
+      type: object
+      properties:
+        origin:
+          $ref: '#/components/schemas/Order'
+        destination:
+          $ref: '#/components/schemas/Order'
+        intermediate_stops:
+          type: array
+          items:
+            $ref: '#/components/schemas/Order'
+      required:
+        - origin
+        - intermediate_stops
+    Leg:
+      type: object
+      properties:
+        sort_order:
+          $ref: '#/components/schemas/Integer'
+        start_order_id:
+          $ref: '#/components/schemas/Long'
+        end_order_id:
+          $ref: '#/components/schemas/Long'
+        driver_arrival_time:
+          $ref: '#/components/schemas/DateTime'
+        driver_departure_time:
+          $ref: '#/components/schemas/DateTime'
+        metrics:
+          $ref: '#/components/schemas/RouteMetrics'
+        path_points:
+          type: array
+          items:
+            $ref: '#/components/schemas/Location'
+      required:
+        - sort_order_id
+        - end_order_id
+        - metrics
+        - path_points
+    RouteMetrics:
+      type: object
+      properties:
+        distance_meter:
+          type: number
+          format: double
+        co2_emission_gram:
+          type: number
+          format: double
+      required:
+        - co2_emission_gram
+        - distance_meter
+    ProblemType:
+      type: string
+      description: "Problem type for optimization"
+      default: cvrp_tw
+      enum:
+        - cvrp_tw
+        - nce
+        - hgs
+
+
+
+  parameters:
+    PageParam:
+      in: query
+      name: page_number
+      description: 페이지
+      schema:
+        type: integer
+        format: int32
+        default: 1
+    SizeParam:
+      in: query
+      name: page_size
+      description: 한 페이지에 노출되는 item 수
+      schema:
+        type: integer
+        format: int32
+        default: 20
+    XParam:
+      in: query
+      name: x
+      description: x 좌표
+      schema:
+        $ref: '#/components/schemas/Longitude'
+    YParam:
+      in: query
+      name: y
+      description: y 좌표
+      schema:
+        $ref: '#/components/schemas/Latitude'
+    RadiusParam:
+      in: query
+      name: radius
+      description: 반경 (미터)
+      schema:
+        type: integer
+        format: int32
+        default: 5000
+    DateParam:
+      in: query
+      name: date
+      description: 조회 대상일 (yyyy-MM-dd)
+      schema:
+        $ref: '#/components/schemas/Date'
+    StartDateTimeParam:
+      in: query
+      name: start_date
+      description: 조회 대상 데이터 시작일 (2022-02-01T10:00:00Z)
+      schema:
+        $ref: '#/components/schemas/DateTime'
+    EndDateTimeParam:
+      in: query
+      name: end_date
+      description: 조회 대상 데이터 종료일 (2022-02-01T23:59:59Z)
+      schema:
+        $ref: '#/components/schemas/DateTime'
+    VersionParam:
+      in: header
+      name: Accept
+      description: API 버전
+      required: true
+      schema:
+        type: string
+        default: 'application/vnd.omelet.v2+json'
+    UserIdParam:
+      in: path
+      name: user_id
+      required: true
+      description: 사용자 식별자
+      schema:
+        $ref: '#/components/schemas/Long'
+    LoginIdParam:
+      in: query
+      name: login_id
+      description: 로그인 아이디
+      schema:
+        $ref: '#/components/schemas/String'
+    UsernameParam:
+      in: query
+      name: username
+      description: 사용자 이름
+      schema:
+        $ref: '#/components/schemas/String'
+    BusinessNumberParam:
+      in: query
+      name: business_number
+      description: 사업자 번호
+      schema:
+        $ref: '#/components/schemas/String'
+    LevelParam:
+      in: query
+      name: level
+      description: 사용자 레벨
+      schema:
+        $ref: '#/components/schemas/Integer'
+    EmailParam:
+      in: query
+      name: email
+      description: 이메일 (URL encoding 필요)
+      schema:
+        $ref: '#/components/schemas/Email'
+    PhoneNumberParam:
+      in: query
+      name: phone_number
+      description: 전화번호
+      schema:
+        $ref: '#/components/schemas/PhoneNumber'
+    RouteIdsParam:
+      in: query
+      name: route_ids
+      description: Route 식별자 목록 (comma separated)
+      schema:
+        type: array
+        items:
+          $ref: '#/components/schemas/Long'
+        example: '1,2,3'
+      style: form
+      explode: false
+    OrderIdParam:
+      in: path
+      required: true
+      name: order_id
+      description: 주문 식별자
+      schema:
+        $ref: '#/components/schemas/Long'
+    OrderIdsParam:
+      in: query
+      name: order_ids
+      description: 주문 식별자 목록 (comma separated)
+      schema:
+        type: array
+        items:
+          $ref: '#/components/schemas/Long'
+        example: '1,2,3'
+      style: form
+      explode: false
+    OrderNumberParam:
+      in: query
+      name: order_number
+      description: 주문 번호
+      schema:
+        $ref: '#/components/schemas/String'
+    DeliveryStatusParam:
+      in: query
+      name: delivery_status
+      description: 배송 상태
+      schema:
+        $ref: '#/components/schemas/DeliveryStatus'
+    DispatchStatusParam:
+      in: query
+      name: dispatch_status
+      description: 배차 상태
+      schema:
+        $ref: '#/components/schemas/DispatchStatus'
+    CustomerNameParam:
+      in: query
+      name: customer_name
+      description: 택배사 이름
+      schema:
+        $ref: '#/components/schemas/String'
+    ItemNameParam:
+      in: query
+      name: item_name
+      description: 품목명
+      schema:
+        $ref: '#/components/schemas/String'
+    OrderedAtStartParam:
+      in: query
+      name: ordered_at_start
+      description: 주문일시 시작
+      schema:
+        $ref: '#/components/schemas/DateTime'
+    OrderedAtEndParam:
+      in: query
+      name: ordered_at_end
+      description: 주문일시 종료
+      schema:
+        $ref: '#/components/schemas/DateTime'
+    PreferredDateStartParam:
+      in: query
+      name: preferred_date_start
+      description: 배송 희망일 시작
+      schema:
+        $ref: '#/components/schemas/DateTime'
+    PreferredDateEndParam:
+      in: query
+      name: preferred_date_end
+      description: 배송 희망일 종료
+      schema:
+        $ref: '#/components/schemas/DateTime'
+    DeliveredAtStartParam:
+      in: query
+      name: delivered_at_start
+      description: 배송 완료일시 시작
+      schema:
+        $ref: '#/components/schemas/DateTime'
+    DeliveredAtEndParam:
+      in: query
+      name: delivered_at_end
+      description: 배송 완료일시 종료
+      schema:
+        $ref: '#/components/schemas/DateTime'
+    LogisticsCenterIdParam:
+      in: query
+      name: logistics_center_id
+      description: 물류센터 ID
+      schema:
+        $ref: '#/components/schemas/Long'
+    JobIdParam:
+      in: path
+      name: job_id
+      required: true
+      description: 경로 최적화 Job ID
+      schema:
+        type: string
+        example: "JOB123"
+    LogisticsCenterIdsParam:
+      in: query
+      name: logistics_center_ids
+      description: 물류센터 ID 목록 (comma separated)
+      schema:
+        type: array
+        items:
+          $ref: '#/components/schemas/Long'
+        example: '1,2,3'
+      style: form
+      explode: false
+    DriverNameParam:
+      in: query
+      name: driver_name
+      description: 운전자 이름
+      schema:
+        $ref: '#/components/schemas/String'
+    AddressQueryParam:
+      in: query
+      name: query
+      required: true
+      schema:
+        $ref: '#/components/schemas/AddressQuery'
+    InvitationCodeParam:
+      in: path
+      name: invitation_code
+      required: true
+      description: |
+        문자로 전달된 초대 코드
+        URL encoding 필요
+      schema:
+        $ref: '#/components/schemas/String'
+    InquiryIdParam:
+      in: path
+      name: inquiry_id
+      required: true
+      description: 문의 식별자
+      schema:
+        $ref: '#/components/schemas/Long'
+    AreaCodeParam:
+      in: path
+      name: area_code
+      required: true
+      description: 주소 코드 (한국)
+      schema:
+        $ref: '#/components/schemas/String'
+    AreaCodeQueryParam:
+      in: query
+      name: area_code
+      description: 주소 코드 (한국)
+      schema:
+        $ref: '#/components/schemas/String'
+    AreaLevelParam:
+      in: query
+      name: area_level
+      description: |
+        주소 레벨 (한국)
+        1: 시도, 2: 시군구, 3: 읍면동
+      schema:
+        $ref: '#/components/schemas/Integer'
+    RegionIdParam:
+      in: path
+      name: region_id
+      required: true
+      description: 권역 식별자
+      schema:
+        $ref: '#/components/schemas/Long'
+    FileNameParam:
+      in: query
+      name: file_name
+      required: true
+      description: 파일 이름
+      schema:
+        $ref: '#/components/schemas/String'
+
+
+
+  requestBodies:
+    OrderRequest:
+      description: 주문 단건 생성, 수정 요청 Object
+      required: true
+      content:
+        'application/vnd.omelet.v2+json':
+          schema:
+            $ref: '#/components/schemas/Order'
+    OrderExcelRequest:
+      description: 주문 생성 요청 엑셀 파일
+      required: true
+      content:
+        'multipart/form-data':
+          schema:
+            type: object
+            properties:
+              file:
+                type: string
+                format: binary
+    LogisticsCenterRequest:
+      description: 물류 센터 단건 생성, 수정 요청 Object
+      required: true
+      content:
+        'application/vnd.omelet.v2+json':
+          schema:
+            $ref: '#/components/schemas/LogisticsCenterRequest'
+    LogisticsCenterExcelRequest:
+      description: 물류 센터 생성 요청 엑셀 파일
+      required: true
+      content:
+        'multipart/form-data':
+          schema:
+            type: object
+            properties:
+              file:
+                type: string
+                format: binary
+    CustomerRequest:
+      description: 고객 단건 생성, 수정 요청 Object
+      required: true
+      content:
+        'application/vnd.omelet.v2+json':
+          schema:
+            $ref: '#/components/schemas/Customer'
+    CustomerExcelRequest:
+      description: 고객 생성 요청 엑셀 파일
+      required: true
+      content:
+        'multipart/form-data':
+          schema:
+            type: object
+            properties:
+              file:
+                type: string
+                format: binary
+    DriverRequest:
+      description: 운전자 단건 생성, 수정 요청 Object
+      required: true
+      content:
+        'application/vnd.omelet.v2+json':
+          schema:
+            $ref: '#/components/schemas/Driver'
+    DriverExcelRequest:
+      description: 운전자 생성 요청 엑셀 파일
+      required: true
+      content:
+        'multipart/form-data':
+          schema:
+            type: object
+            properties:
+              file:
+                type: string
+                format: binary
+    UserRequest:
+      description: 사용자 생성, 수정 요청 Object
+      required: true
+      content:
+        'application/vnd.omelet.v2+json':
+          schema:
+            $ref: '#/components/schemas/User'
+    UserRuleRequest:
+      description: 사용자 권한 생성, 수정 요청 Object
+      required: true
+      content:
+        'application/vnd.omelet.v2+json':
+          schema:
+            $ref: '#/components/schemas/UserRule'
+    OrderDispatchStatusRequest:
+      description: 주문 배차 상태 변경 요청 Object
+      required: true
+      content:
+        'application/vnd.omelet.v2+json':
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/OrderDispatchStatusRequest'
+    OrderDeliveryStatusRequest:
+      description: 주문 배송 상태 변경 요청 Object
+      required: true
+      content:
+        'application/vnd.omelet.v2+json':
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/OrderDeliveryStatusRequest'
+    RouteOptimizationRequest:
+      description: 경로 최적화 요청 Object
+      required: true
+      content:
+        'application/vnd.omelet.v2+json':
+          schema:
+            $ref: '#/components/schemas/RouteOptimizationRequest'
+    RouteOptimizationWithOrderRequest:
+      description: |
+        - 경로 최적화 요청 Object
+        - 주문을 생성하고 최적화를 요청할 때 사용 (앱용)
+      required: true
+      content:
+        'application/vnd.omelet.v2+json':
+          schema:
+            $ref: '#/components/schemas/RouteOptimizationWithOrderRequest'
+    LoginRequest:
+      description: 로그인 요청 Object
+      required: true
+      content:
+        'application/vnd.omelet.v2+json':
+          schema:
+            type: object
+            properties:
+              login_id:
+                $ref: '#/components/schemas/String'
+              password:
+                $ref: '#/components/schemas/Password'
+            required:
+              - login_id
+              - password
+    RefreshTokenRequest:
+      description: Refresh Token 요청 Object
+      required: true
+      content:
+        'application/vnd.omelet.v2+json':
+          schema:
+            type: object
+            properties:
+              refresh_token:
+                $ref: '#/components/schemas/Token'
+            required:
+              - refresh_token
+    SignupRequest:
+      description: 회원가입 요청 Object
+      required: true
+      content:
+        'application/vnd.omelet.v2+json':
+          schema:
+            $ref: '#/components/schemas/SignupRequest'
+    ResetPasswordRequest:
+      description: 비밀번호 재설정 요청 Object
+      required: true
+      content:
+        'application/vnd.omelet.v2+json':
+          schema:
+            $ref: '#/components/schemas/ResetPasswordRequest'
+    SearchPasswordRequest:
+      description: 비밀번호 찾기 요청 object
+      required: true
+      content:
+        'application/vnd.omelet.v2+json':
+          schema:
+            $ref: '#/components/schemas/SearchPasswordRequest'
+    EmailVerificationRequest:
+      description: Email 인증 요청 object
+      required: true
+      content:
+        'application/vnd.omelet.v2+json':
+          schema:
+            $ref: '#/components/schemas/EmailVerificationRequest'
+    SmsVerificationRequest:
+      description: SMS 인증 요청 object
+      required: true
+      content:
+        'application/vnd.omelet.v2+json':
+          schema:
+            $ref: '#/components/schemas/SmsVerificationRequest'
+    VerifyEmailRequest:
+      description: Email 인증 코드 검증 요청 object
+      required: true
+      content:
+        'application/vnd.omelet.v2+json':
+          schema:
+            $ref: '#/components/schemas/VerifyEmailRequest'
+    VerifySmsRequest:
+      description: SMS 인증 코드 검증 요청 object
+      required: true
+      content:
+        'application/vnd.omelet.v2+json':
+          schema:
+            $ref: '#/components/schemas/VerifySmsRequest'
+    DriverInvitationRequest:
+      description: 운전자 초대 요청 object
+      required: true
+      content:
+        'application/vnd.omelet.v2+json':
+          schema:
+            $ref: '#/components/schemas/DriverInvitationRequest'
+    DriverInvitationExcelRequest:
+      description: 운전자 초대 요청 엑셀 파일
+      required: true
+      content:
+        'multipart/form-data':
+          schema:
+            type: object
+            properties:
+              file:
+                type: string
+                format: binary
+    DriverSignupRequest:
+      description: 운전자 회원가입 요청 object
+      required: true
+      content:
+        'application/vnd.omelet.v2+json':
+          schema:
+            $ref: '#/components/schemas/DriverSignupRequest'
+    InquiryRequest:
+      description: 문의하기 요청 object
+      required: true
+      content:
+        'application/vnd.omelet.v2+json':
+          schema:
+            $ref: '#/components/schemas/InquiryRequest'
+    RegionRequest:
+      description: 권역 생성, 수정 요청 Object
+      required: true
+      content:
+        'application/vnd.omelet.v2+json':
+          schema:
+            $ref: '#/components/schemas/RegionRequest'
+
+
+
+  responses:
+    Created:
+      description: Created
+    Accepted:
+      description: Accepted
+    NoContent:
+      description: No Content
+    EmptyContent:
+      description: No Content
+      content:
+        'application/vnd.omelet.v2+json': { }
+    BadRequest:
+      description: Bad Request
+      content:
+        'application/problem+json':
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+    Unauthorized:
+      description: Unauthorized
+      content:
+        'application/problem+json':
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+    Forbidden:
+      description: Forbidden
+      content:
+        'application/problem+json':
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+    NotFound:
+      description: Not Found
+      content:
+        'application/problem+json':
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+    Conflict:
+      description: Conflict
+      content:
+        'application/problem+json':
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+    ServerError:
+      description: Internal Server Error
+      content:
+        'application/problem+json':
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+    UserListResponse:
+      description: 사용자 조회 응답
+      content:
+        'application/vnd.omelet.v2+json':
+          schema:
+            $ref: '#/components/schemas/UserListResponse'
+    UserResponse:
+      description: 사용자 조회 응답
+      content:
+        'application/vnd.omelet.v2+json':
+          schema:
+            $ref: '#/components/schemas/User'
+    RouteListResponse:
+      description: 경로 조회 응답
+      content:
+        'application/vnd.omelet.v2+json':
+          schema:
+            $ref: '#/components/schemas/RouteListResponse'
+    RouteOptimizationJobIdResponse:
+      description: 경로 최적화 Job ID 응답
+      content:
+        'application/vnd.omelet.v2+json':
+          schema:
+            $ref: '#/components/schemas/RouteOptimizationJobIdResponse'
+    RouteOptimizationResponse:
+      description: 경로 최적화 Job 상태 응답. 완료 상태일 경우 최적화 결과를 포함한다.
+      content:
+        'application/vnd.omelet.v2+json':
+          schema:
+            $ref: '#/components/schemas/RouteOptimizationResponse'
+    UserRuleListResponse:
+      description: 사용자 권한 조회 응답
+      content:
+        'application/vnd.omelet.v2+json':
+          schema:
+            $ref: '#/components/schemas/UserRuleListResponse'
+    OrderListResponse:
+      description: 주문 목록 조회 응답
+      content:
+        'application/vnd.omelet.v2+json':
+          schema:
+            $ref: '#/components/schemas/OrderListResponse'
+    OrderResponse:
+      description: 주문 조회 응답
+      content:
+        'application/vnd.omelet.v2+json':
+          schema:
+            $ref: '#/components/schemas/Order'
+    LogisticsCenterListResponse:
+      description: 물류센터 목록 조회 응답
+      content:
+        'application/vnd.omelet.v2+json':
+          schema:
+            $ref: '#/components/schemas/LogisticsCenterListResponse'
+    CustomerListResponse:
+      description: 고객 목록 조회 응답
+      content:
+        'application/vnd.omelet.v2+json':
+          schema:
+            $ref: '#/components/schemas/CustomerListResponse'
+    DriverListResponse:
+      description: 운전자 목록 조회 응답
+      content:
+        'application/vnd.omelet.v2+json':
+          schema:
+            $ref: '#/components/schemas/DriverListResponse'
+    TokenResponse:
+      description: 로그인 응답
+      content:
+        'application/vnd.omelet.v2+json':
+          schema:
+            $ref: '#/components/schemas/TokenResponse'
+    AddressListResponse:
+      description: 주소 목록 조회 응답
+      content:
+        'application/vnd.omelet.v2+json':
+          schema:
+            $ref: '#/components/schemas/AddressListResponse'
+    DriverInvitationResponse:
+      description: 운전자 초대 응답
+      content:
+        'application/vnd.omelet.v2+json':
+          schema:
+            $ref: '#/components/schemas/DriverInvitationResponse'
+    PresignedUrlResponse:
+      description: AWS S3 Presigned URL Response
+      content:
+        'application/vnd.omelet.v2+json':
+          schema:
+            $ref: '#/components/schemas/PresignedUrlResponse'
+    InquiryListResponse:
+      description: 문의하기 목록 조회 응답
+      content:
+        'application/vnd.omelet.v2+json':
+          schema:
+            $ref: '#/components/schemas/InquiryListResponse'
+    InquiryResponse:
+      description: 문의하기 조회 응답
+      content:
+        'application/vnd.omelet.v2+json':
+          schema:
+            $ref: '#/components/schemas/Inquiry'
+    DistrictListResponse:
+      description: 지역 목록 조회 응답
+      content:
+        'application/vnd.omelet.v2+json':
+          schema:
+            $ref: '#/components/schemas/DistrictListResponse'
+    DistrictResponse:
+      description: 지역 조회 응답
+      content:
+        'application/vnd.omelet.v2+json':
+          schema:
+            $ref: '#/components/schemas/District'
+    RegionListResponse:
+      description: 권역 목록 조회 응답
+      content:
+        'application/vnd.omelet.v2+json':
+          schema:
+            $ref: '#/components/schemas/RegionListResponse'
+    RouteResponse:
+      description: 경로 계획 응답
+      content:
+        'application/vnd.omelet.v2+json':
+          schema:
+            $ref: '#/components/schemas/Route'
+
+
+
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+
+
+security:
+  - BearerAuth: [ ]  # 기본적으로 모든 경로에 Bearer 인증 적용
