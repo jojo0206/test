@@ -1916,6 +1916,8 @@ components:
           $ref: '#/components/schemas/DateTime'
         last_modified_at:
           $ref: '#/components/schemas/DateTime'
+        logistics_center:
+          $ref: '#/components/schemas/LogisticsCenter'
         organization:
           $ref: '#/components/schemas/Organization'
         regions:
@@ -2260,6 +2262,11 @@ components:
           example: "LC123,LC456"
         options:
           $ref: '#/components/schemas/RouteOptimizationOptions'
+    FinalDestinationType:
+      type: string
+      enum: [ 'DESIGNATED_ADDRESS', 'START_POINT', 'LAST_WAYPOINT' ]
+      description: The final destination type for the route.
+      example: 'DESIGNATED_ADDRESS'
     RouteOptimizationWithOrderRequest:
       type: object
       properties:
@@ -2270,6 +2277,8 @@ components:
           $ref: '#/components/schemas/DateTime'
         options:
           $ref: '#/components/schemas/SimpleRouteOptimizationOptions'
+        final_destination_type:
+          $ref: '#/components/schemas/FinalDestinationType'
         origin:
           $ref: '#/components/schemas/Order'
           description: The origin order.
