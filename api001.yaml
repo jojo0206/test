@@ -1,0 +1,186 @@
+openapi: 3.0.3
+info:
+  title: OaaSIS Behavior Collector
+  version: v1
+  description: OaaSIS Behavior Collector
+  contact:
+    name: omelet
+    url: https://omelet.ai/contact-us
+    email: info@omelet.ai
+
+
+
+servers:
+  - url: http://localhost:9100
+    description: Development server
+
+
+
+paths:
+  /api/behaviors/geo-location:
+    post:
+      tags:
+        - BehaviorCollector
+      description: Behavior Collector for OaaSIS
+      operationId: geoLocationCollector
+      requestBody:
+        $ref: '#/components/requestBodies/GeoLocationRequest'
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+
+
+components:
+  schemas:
+    ProblemDetails:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+          example: oaasis/constraint-violation
+        status:
+          type: integer
+          format: int32
+          example: 400
+        title:
+          type: string
+          example: 제출한 요청이 유효하지 않습니다
+        code:
+          type: string
+          example: 0000
+        detail:
+          type: string
+          example: 제출한 요청이 유효하지 않습니다
+        instance:
+          type: string
+          format: uri
+          example: /api/users
+        field_errors:
+          type: array
+          nullable: true
+          items:
+            $ref: '#/components/schemas/FieldError'
+    FieldError:
+      type: object
+      properties:
+        field:
+          type: string
+        message:
+          $ref: '#/components/schemas/ErrorCode'
+    ErrorCode:
+      type: string
+      example:
+        - NotNull
+        - Size
+    GeoLocationEvent:
+      type: object
+      description: |
+        - Event object
+        - This object is used to represent a single event in the geo-location data
+      properties:
+        longitude:
+          type: number
+          format: double
+          example: 127.04799999999999
+          description: |
+            - Longitude in geo-location
+            - The value is in the range of -180 to 180
+        latitude:
+          type: number
+          format: double
+          example: 37.5050979384459
+          description: |
+            - Latitude in geo-location
+            - The value is in the range of -90 to 90
+        speed:
+          type: number
+          format: float
+          example: 1.1
+          description: |
+            - Speed in m/s
+            - 0 indicates that the vehicle is stopped
+        heading:
+          type: number
+          format: float
+          example: 89.4
+          description: |
+            - Heading in degrees
+            - 0 indicates that the vehicle is facing north
+        event_time:
+          type: string
+          format: date-time
+          example: "2023-10-01T12:00:00+09:00"
+    GeoLocationRequest:
+      type: object
+      description: Geo-location event Request object by session
+      properties:
+        user_id:
+          type: string
+          format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174000"
+          description: User ID
+        session_id:
+          type: string
+          format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174001"
+          description: |
+            - Session ID
+            - The session ID is updated each time the app is activated
+            - A new session ID is issued when the app is restarted or brought back from the background
+        events:
+          type: array
+          items:
+            $ref: '#/components/schemas/GeoLocationEvent'
+
+
+
+  requestBodies:
+    GeoLocationRequest:
+      description: Geo-location event Request object by session
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GeoLocationRequest'
+
+
+
+  responses:
+    Created:
+      description: Created
+    Accepted:
+      description: Accepted
+    NoContent:
+      description: No Content
+    BadRequest:
+      description: Bad Request
+      content:
+        'application/problem+json':
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+    Unauthorized:
+      description: Unauthorized
+      content:
+        'application/problem+json':
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+    NotFound:
+      description: Not Found
+      content:
+        'application/problem+json':
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+    ServerError:
+      description: Internal Server Error
+      content:
+        'application/problem+json':
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
